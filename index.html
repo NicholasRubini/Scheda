@@ -1,0 +1,2287 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Scegli la Scheda Giusta | Nicholas Rubini</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-card: #16161a;
+            --gold: #c9a227;
+            --gold-light: #e3c76f;
+            --gold-dark: #9a7b1c;
+            --text-primary: #f5f5f5;
+            --text-secondary: #a0a0a5;
+            --text-muted: #6a6a70;
+            --border: #2a2a30;
+            --success: #4a9c6d;
+            --radius: 8px;
+            --shadow: 0 4px 24px rgba(0,0,0,0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: 100dvh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Norse Pattern Background */
+        .norse-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5L35 15L45 15L37 22L40 32L30 26L20 32L23 22L15 15L25 15Z' fill='none' stroke='%23c9a227' stroke-width='1'/%3E%3C/svg%3E");
+            background-size: 120px 120px;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 24px 20px;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Mini Author Box */
+        .mini-author {
+            text-align: center;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mini-author-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .mini-author-name {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 32px;
+        }
+
+        header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        header .header-highlight {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--gold-light);
+            font-style: normal;
+            margin-bottom: 12px;
+        }
+
+        header .header-desc {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 32px;
+        }
+
+        .progress-bar {
+            height: 3px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        /* Question Section */
+        .question-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .step {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .step.active {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-header {
+            margin-bottom: 24px;
+        }
+
+        .question-number {
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .question-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .option {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .option:hover {
+            border-color: var(--gold-dark);
+            background: var(--bg-secondary);
+        }
+
+        .option:active {
+            transform: scale(0.98);
+        }
+
+        .option.selected {
+            border-color: var(--gold);
+            background: rgba(201, 162, 39, 0.08);
+        }
+
+        .option-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            color: var(--gold);
+        }
+
+        .option-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .option.selected .option-icon {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: var(--bg-primary);
+        }
+
+        .option-content {
+            flex: 1;
+        }
+
+        .option-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .option-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .option-arrow {
+            color: var(--text-muted);
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .option-arrow svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .option:hover .option-arrow {
+            transform: translateX(4px);
+            color: var(--gold);
+        }
+
+        /* Back Button */
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            padding: 8px 0;
+            margin-bottom: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            color: var(--gold);
+        }
+
+        .back-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Result Section */
+        .result {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        /* Social Proof */
+        .social-proof {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: rgba(201, 162, 39, 0.08);
+            border: 1px solid var(--gold-dark);
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+        }
+
+        .social-proof-icon {
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+        }
+
+        .social-proof-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .social-proof-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .result-card {
+            background: var(--bg-card);
+            border: 1px solid var(--gold-dark);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            text-align: center;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
+        }
+
+        .result-badge {
+            display: inline-block;
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--gold);
+            background: rgba(201, 162, 39, 0.1);
+            padding: 6px 16px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .result-desc {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+
+        .result-features {
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .result-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .result-feature:last-child {
+            border-bottom: none;
+        }
+
+        .result-feature-icon {
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+        }
+
+        .result-feature-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .result-feature-text {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .result-cta {
+            display: block;
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            color: var(--bg-primary);
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            text-decoration: none;
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .result-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(201, 162, 39, 0.3);
+        }
+
+        .result-cta:active {
+            transform: scale(0.98);
+        }
+
+        /* Alternative Products */
+        .alternatives {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .alternatives-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .alt-product {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 10px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .alt-product:hover {
+            border-color: var(--gold-dark);
+        }
+
+        .alt-product-name {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .alt-product-arrow {
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .alt-product-arrow svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .alt-product:hover .alt-product-arrow {
+            color: var(--gold);
+        }
+
+        /* Restart Button */
+        .restart-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px;
+            margin-top: 24px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text-secondary);
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .restart-btn:hover {
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+
+        /* Author Box */
+        .author-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-top: 32px;
+            text-align: center;
+        }
+
+        .author-box-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 12px;
+        }
+
+        .author-box-text {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding-top: 32px;
+            margin-top: auto;
+        }
+
+        footer p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        footer a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        /* Kettlebell Icon SVG */
+        .kb-icon {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* Safe Area for iPhone */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .container {
+                padding-bottom: calc(24px + env(safe-area-inset-bottom));
+            }
+        }
+
+        /* Small phones */
+        @media (max-height: 700px) {
+            .container {
+                padding: 16px 16px;
+            }
+            
+            header {
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+            }
+
+            .question-text {
+                font-size: 1.25rem;
+            }
+
+            .option {
+                padding: 14px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="norse-bg"></div>
+    
+    <div class="container">
+        <!-- Mini Author Box -->
+        <div class="mini-author">
+            <p class="mini-author-text">di <span class="mini-author-name">Nicholas Rubini</span>, Strength & Conditioning Coach</p>
+        </div>
+
+        <header>
+            <h1>Scegli la Scheda Giusta</h1>
+            <p class="header-highlight">(senza perdere mesi)</p>
+            <p class="header-desc">Completa il breve questionario e ottieni il programma più adatto al tuo obiettivo.</p>
+        </header>
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">3 domande · 20 secondi · nessuna registrazione</div>
+        </div>
+
+        <div class="question-section" id="questionSection">
+            
+            <!-- Step 1: Tipo di Atleta -->
+            <div class="step active" id="step1">
+                <div class="question-header">
+                    <div class="question-number">Domanda I</div>
+                    <h2 class="question-text">Che tipo di Atleta sei?</h2>
+                    <p class="question-subtitle">Seleziona la categoria che ti rappresenta meglio</p>
+                </div>
+                <div class="options">
+                    <div class="option" data-value="sala-pesi" onclick="selectOption(this, 1)">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6.5 6.5h-2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h2"/>
+                                <path d="M17.5 6.5h2a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-2"/>
+                                <path d="M6.5 4v16"/>
+                                <path d="M17.5 4v16"/>
+                                <path d="M6.5 12h11"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Sala Pesi</div>
+                            <div class="option-desc">Bodybuilding, Powerlifting, PowerBuilding</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="hybrid" onclick="selectOption(this, 1)">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6.5 6.5h-1a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h1"/>
+                                <path d="M6.5 5v9"/>
+                                <path d="M6.5 9.5h4"/>
+                                <circle cx="17" cy="15" r="4"/>
+                                <path d="M17 11v4"/>
+                                <path d="M15 15h4"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Hybrid Training</div>
+                            <div class="option-desc">Forza in sala pesi + Corsa / Endurance</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="sportivo" onclick="selectOption(this, 1)">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                <path d="M2 12h20"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Sportivo</div>
+                            <div class="option-desc">Calcio, Basket, Tennis, Sport di Squadra</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="fighter" onclick="selectOption(this, 1)">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 16s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                                <path d="M4 22V16"/>
+                                <circle cx="18" cy="8" r="2"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Fighter</div>
+                            <div class="option-desc">Boxe, MMA, BJJ, Judo, Arti Marziali</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="kettlebell" onclick="selectOption(this, 1)">
+                        <div class="option-icon">
+                            <svg class="kb-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C9.5 2 7.5 3.5 7 5.5C6.5 5.2 5.8 5 5 5C3.3 5 2 6.3 2 8C2 9.4 2.8 10.5 4 10.9V11C4 11 4 20 12 22C20 20 20 11 20 11V10.9C21.2 10.5 22 9.4 22 8C22 6.3 20.7 5 19 5C18.2 5 17.5 5.2 17 5.5C16.5 3.5 14.5 2 12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="13" r="4" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Kettlebell</div>
+                            <div class="option-desc">Allenamento funzionale con kettlebell</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="esplosivita" onclick="selectOption(this, 1)">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Esplosività & Velocità</div>
+                            <div class="option-desc">Scatti, salti, potenza atletica</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Sala Pesi -->
+            <div class="step" id="step2-sala-pesi">
+                <button class="back-btn" onclick="goBack('step1')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Indietro
+                </button>
+                <div class="question-header">
+                    <div class="question-number">Domanda II</div>
+                    <h2 class="question-text">Qual è il tuo obiettivo principale?</h2>
+                    <p class="question-subtitle">Cosa vuoi ottenere dal tuo allenamento?</p>
+                </div>
+                <div class="options">
+                    <div class="option" data-value="massa" onclick="showResult('bodybuilding-ai')">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M7 17V7h4a4 4 0 1 1 0 6H7"/>
+                                <path d="M17 17V7"/>
+                                <path d="M17 11h-3"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Massa Muscolare</div>
+                            <div class="option-desc">Ipertrofia e composizione corporea</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="forza" onclick="selectOption(this, 2)">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <circle cx="12" cy="12" r="6"/>
+                                <circle cx="12" cy="12" r="2"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Forza Massimale</div>
+                            <div class="option-desc">Aumentare Squat, Panca, Stacco</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="calisthenics" onclick="showResult('streetlifting')">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 8h16"/>
+                                <path d="M8 4v4"/>
+                                <path d="M16 4v4"/>
+                                <path d="M12 8v8"/>
+                                <path d="M8 16l4 4 4-4"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Streetlifting</div>
+                            <div class="option-desc">Squat, Pull Ups, Dips zavorrati</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="ibrido" onclick="showResult('powerbuilding-ai')">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 3v18"/>
+                                <path d="M3 12h18"/>
+                                <path d="M8 8l8 8"/>
+                                <path d="M16 8l-8 8"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Forza + Massa</div>
+                            <div class="option-desc">PowerBuilding: il meglio di entrambi</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Sportivo -->
+            <div class="step" id="step2-sportivo">
+                <button class="back-btn" onclick="goBack('step1')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Indietro
+                </button>
+                <div class="question-header">
+                    <div class="question-number">Domanda II</div>
+                    <h2 class="question-text">Quale sport pratichi?</h2>
+                    <p class="question-subtitle">Seleziona la categoria più vicina al tuo sport</p>
+                </div>
+                <div class="options">
+                    <div class="option" data-value="calcio" onclick="selectOption(this, 2)">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                <path d="M2 12h20"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Calcio</div>
+                            <div class="option-desc">Calciatore o portiere</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="salto" onclick="selectOption(this, 2)">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="5" r="3"/>
+                                <path d="M12 22V8"/>
+                                <path d="M5 12h14"/>
+                                <path d="M9 19l3-7 3 7"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Sport di Salto</div>
+                            <div class="option-desc">Basket, Volley, Salto Verticale</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="squadra" onclick="showResult('strength-sports')">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Altro Sport di Squadra</div>
+                            <div class="option-desc">Rugby, Football, Hockey, ecc.</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="tennis" onclick="showResult('strength-sports')">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M18.09 6.74c-3.59 3.59-3.59 9.43 0 13.02"/>
+                                <path d="M5.91 17.26c3.59-3.59 3.59-9.43 0-13.02"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Sport Individuale</div>
+                            <div class="option-desc">Tennis, Padel, Atletica</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Sala Pesi - Forza -->
+            <div class="step" id="step3-forza">
+                <button class="back-btn" onclick="goBack('step2-sala-pesi')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Indietro
+                </button>
+                <div class="question-header">
+                    <div class="question-number">Domanda III</div>
+                    <h2 class="question-text">Preferisci una scheda fissa o personalizzata?</h2>
+                    <p class="question-subtitle">Scegli il tipo di programma</p>
+                </div>
+                <div class="options">
+                    <div class="option" data-value="scheda-pl" onclick="showResult('powerlifting')">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Scheda 12 Settimane</div>
+                            <div class="option-desc">Programma strutturato pronto all'uso</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="ai-pb" onclick="showResult('powerbuilding-ai')">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
+                                <path d="M7.5 13a1.5 1.5 0 1 0 3 0 1.5 1.5 0 1 0-3 0z"/>
+                                <path d="M13.5 13a1.5 1.5 0 1 0 3 0 1.5 1.5 0 1 0-3 0z"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">PowerBuilding A.I.</div>
+                            <div class="option-desc">Scheda generata su misura per te</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Calcio -->
+            <div class="step" id="step3-calcio">
+                <button class="back-btn" onclick="goBack('step2-sportivo')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Indietro
+                </button>
+                <div class="question-header">
+                    <div class="question-number">Domanda III</div>
+                    <h2 class="question-text">Cosa stai cercando?</h2>
+                    <p class="question-subtitle">Seleziona l'opzione più adatta a te</p>
+                </div>
+                <div class="options">
+                    <div class="option" data-value="giocatore" onclick="showResult('calciatore')">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="5" r="3"/>
+                                <path d="M12 22V8"/>
+                                <path d="M5 12h14"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Giocatore di Movimento</div>
+                            <div class="option-desc">Attaccante, Centrocampista, Difensore</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="portiere" onclick="showResult('portiere')">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 4.1V2H10v2.1a5 5 0 0 0-4 4.9v1h12V7a5 5 0 0 0-4-2.9z"/>
+                                <path d="M6 10v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10"/>
+                                <path d="M10 15h4"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Portiere</div>
+                            <div class="option-desc">Esplosività e reattività specifiche</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="performance-calcio" onclick="showResult('performance-calcio')">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
+                                <path d="M7.5 13a1.5 1.5 0 1 0 3 0 1.5 1.5 0 1 0-3 0z"/>
+                                <path d="M13.5 13a1.5 1.5 0 1 0 3 0 1.5 1.5 0 1 0-3 0z"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Performance A.I.</div>
+                            <div class="option-desc">Scheda personalizzata con intelligenza artificiale</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Sport di Salto -->
+            <div class="step" id="step3-salto">
+                <button class="back-btn" onclick="goBack('step2-sportivo')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Indietro
+                </button>
+                <div class="question-header">
+                    <div class="question-number">Domanda III</div>
+                    <h2 class="question-text">Quale sport pratichi?</h2>
+                    <p class="question-subtitle">Seleziona il tuo sport per la scheda migliore</p>
+                </div>
+                <div class="options">
+                    <div class="option" data-value="basket" onclick="selectOption(this, 3)">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M4.93 4.93l14.14 14.14"/>
+                                <path d="M19.07 4.93L4.93 19.07"/>
+                                <path d="M12 2v20"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Basket</div>
+                            <div class="option-desc">Pallacanestro</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="volley" onclick="selectOption(this, 3)">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 2a10 10 0 0 1 0 20"/>
+                                <path d="M2.5 9h19"/>
+                                <path d="M2.5 15h19"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Pallavolo</div>
+                            <div class="option-desc">Volleyball</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Basket -->
+            <div class="step" id="step4-basket">
+                <button class="back-btn" onclick="goBack('step3-salto')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Indietro
+                </button>
+                <div class="question-header">
+                    <div class="question-number">Domanda IV</div>
+                    <h2 class="question-text">Cosa preferisci?</h2>
+                    <p class="question-subtitle">Scegli il tipo di programma</p>
+                </div>
+                <div class="options">
+                    <div class="option" data-value="defy-gravity" onclick="showResult('salto')">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+                                <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+                                <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+                                <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Defy Gravity</div>
+                            <div class="option-desc">Programma per aumentare il salto verticale</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="performance-basket" onclick="showResult('performance-basket')">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
+                                <path d="M7.5 13a1.5 1.5 0 1 0 3 0 1.5 1.5 0 1 0-3 0z"/>
+                                <path d="M13.5 13a1.5 1.5 0 1 0 3 0 1.5 1.5 0 1 0-3 0z"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Performance A.I.</div>
+                            <div class="option-desc">Scheda personalizzata con intelligenza artificiale</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Volley -->
+            <div class="step" id="step4-volley">
+                <button class="back-btn" onclick="goBack('step3-salto')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Indietro
+                </button>
+                <div class="question-header">
+                    <div class="question-number">Domanda IV</div>
+                    <h2 class="question-text">Cosa preferisci?</h2>
+                    <p class="question-subtitle">Scegli il tipo di programma</p>
+                </div>
+                <div class="options">
+                    <div class="option" data-value="defy-gravity" onclick="showResult('salto')">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+                                <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+                                <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+                                <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Defy Gravity</div>
+                            <div class="option-desc">Programma per aumentare il salto verticale</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="option" data-value="performance-volley" onclick="showResult('performance-volley')">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
+                                <path d="M7.5 13a1.5 1.5 0 1 0 3 0 1.5 1.5 0 1 0-3 0z"/>
+                                <path d="M13.5 13a1.5 1.5 0 1 0 3 0 1.5 1.5 0 1 0-3 0z"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <div class="option-title">Performance A.I.</div>
+                            <div class="option-desc">Scheda personalizzata con intelligenza artificiale</div>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Results -->
+        
+        <div class="result" id="result-bodybuilding-ai">
+            <div class="social-proof">
+                <span class="social-proof-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </span>
+                <span class="social-proof-text">Migliaia di Atleti sono migliorati con i miei programmi di allenamento professionali</span>
+            </div>
+            <div class="result-card">
+                <span class="result-badge">La Tua Scheda Ideale</span>
+                <h3 class="result-title">BodyBuilding A.I.</h3>
+                <p class="result-desc">Scheda personalizzata generata dall'intelligenza artificiale in base ai tuoi parametri, obiettivi e disponibilità.</p>
+                <div class="result-features">
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Scheda su misura per te</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Adattata alla tua esperienza</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Esercizi basati sulle tue attrezzature</span>
+                    </div>
+                </div>
+                <a href="https://www.schedabodybuilding.it/massa/" class="result-cta">Scopri BodyBuilding A.I.</a>
+            </div>
+            <button class="restart-btn" onclick="restart()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                Ricomincia il Questionario
+            </button>
+        </div>
+
+        <div class="result" id="result-powerlifting">
+            <div class="social-proof">
+                <span class="social-proof-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </span>
+                <span class="social-proof-text">Migliaia di Atleti sono migliorati con i miei programmi di allenamento professionali</span>
+            </div>
+            <div class="result-card">
+                <span class="result-badge">La Tua Scheda Ideale</span>
+                <h3 class="result-title">Scheda Powerlifting</h3>
+                <p class="result-desc">12 settimane per aumentare i tuoi massimali su Squat, Panca e Stacco con una programmazione scientifica.</p>
+                <div class="result-features">
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Progressione sui 3 fondamentali</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Periodizzazione del carico</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Accessori mirati per la forza</span>
+                    </div>
+                </div>
+                <a href="https://nicholasrubini.it/prodotto/scheda-powerlifting/" class="result-cta">Scopri la Scheda</a>
+            </div>
+            <div class="alternatives">
+                <div class="alternatives-title">Potrebbe interessarti anche</div>
+                <a href="https://www.powerbuilding.it/pb-ai" class="alt-product">
+                    <span class="alt-product-name">PowerBuilding A.I.</span>
+                    <span class="alt-product-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <button class="restart-btn" onclick="restart()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                Ricomincia il Questionario
+            </button>
+        </div>
+
+        <div class="result" id="result-powerbuilding-ai">
+            <div class="social-proof">
+                <span class="social-proof-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </span>
+                <span class="social-proof-text">Migliaia di Atleti sono migliorati con i miei programmi di allenamento professionali</span>
+            </div>
+            <div class="result-card">
+                <span class="result-badge">La Tua Scheda Ideale</span>
+                <h3 class="result-title">PowerBuilding A.I.</h3>
+                <p class="result-desc">Il meglio di forza e ipertrofia. Scheda personalizzata per aumentare massa e forza su Squat, Panca e Stacco.</p>
+                <div class="result-features">
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Bilancia forza e ipertrofia</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Scheda generata su misura</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Progressione intelligente</span>
+                    </div>
+                </div>
+                <a href="https://www.powerbuilding.it/pb-ai" class="result-cta">Scopri PowerBuilding A.I.</a>
+            </div>
+            <div class="alternatives">
+                <div class="alternatives-title">Potrebbe interessarti anche</div>
+                <a href="https://nicholasrubini.it/prodotto/scheda-powerlifting/" class="alt-product">
+                    <span class="alt-product-name">Scheda Powerlifting 12 Settimane</span>
+                    <span class="alt-product-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <button class="restart-btn" onclick="restart()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                Ricomincia il Questionario
+            </button>
+        </div>
+
+        <div class="result" id="result-hybrid">
+            <div class="social-proof">
+                <span class="social-proof-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </span>
+                <span class="social-proof-text">Migliaia di Atleti sono migliorati con i miei programmi di allenamento professionali</span>
+            </div>
+            <div class="result-card">
+                <span class="result-badge">La Tua Scheda Ideale</span>
+                <h3 class="result-title">Scheda Hybrid Athlete</h3>
+                <p class="result-desc">Il programma completo per chi vuole essere forte in sala pesi e performante nella corsa. Il meglio di entrambi i mondi.</p>
+                <div class="result-features">
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Forza e resistenza integrate</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Programmazione concurrent training</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Gestione intelligente dell'interferenza</span>
+                    </div>
+                </div>
+                <a href="https://www.nicholasrubini.it/prodotto/scheda-hybrid-athlete/" class="result-cta">Scopri la Scheda</a>
+            </div>
+            <div class="alternatives">
+                <div class="alternatives-title">Potrebbe interessarti anche</div>
+                <a href="https://www.powerbuilding.it/pb-ai" class="alt-product">
+                    <span class="alt-product-name">PowerBuilding A.I.</span>
+                    <span class="alt-product-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <button class="restart-btn" onclick="restart()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                Ricomincia il Questionario
+            </button>
+        </div>
+
+        <div class="result" id="result-streetlifting">
+            <div class="social-proof">
+                <span class="social-proof-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </span>
+                <span class="social-proof-text">Migliaia di Atleti sono migliorati con i miei programmi di allenamento professionali</span>
+            </div>
+            <div class="result-card">
+                <span class="result-badge">La Tua Scheda Ideale</span>
+                <h3 class="result-title">Scheda Streetlifting</h3>
+                <p class="result-desc">12 settimane per aumentare i tuoi massimali su Squat, Pull Ups e Dips zavorrati.</p>
+                <div class="result-features">
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Focus sui 3 esercizi dello streetlifting</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Progressione zavorra</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Accessori per forza relativa</span>
+                    </div>
+                </div>
+                <a href="https://nicholasrubini.it/prodotto/scheda-streetlifting/" class="result-cta">Scopri la Scheda</a>
+            </div>
+            <button class="restart-btn" onclick="restart()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                Ricomincia il Questionario
+            </button>
+        </div>
+
+        <div class="result" id="result-calciatore">
+            <div class="social-proof">
+                <span class="social-proof-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </span>
+                <span class="social-proof-text">Migliaia di Atleti sono migliorati con i miei programmi di allenamento professionali</span>
+            </div>
+            <div class="result-card">
+                <span class="result-badge">La Tua Scheda Ideale</span>
+                <h3 class="result-title">Il Calciatore Esplosivo</h3>
+                <p class="result-desc">Strength & Power Training specifico per calciatori. Diventa più esplosivo, veloce e resistente in campo.</p>
+                <div class="result-features">
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Sviluppo esplosività e accelerazione</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Prevenzione infortuni</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Compatibile con allenamenti in campo</span>
+                    </div>
+                </div>
+                <a href="https://nicholasrubini.it/prodotto/il-calciatore-esplosivo/" class="result-cta">Scopri la Scheda</a>
+            </div>
+            <div class="alternatives">
+                <div class="alternatives-title">Potrebbe interessarti anche</div>
+                <a href="https://nicholasrubini.it/prodotto/sprints-jumps/" class="alt-product">
+                    <span class="alt-product-name">Sprints & Jumps for Sports</span>
+                    <span class="alt-product-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <button class="restart-btn" onclick="restart()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                Ricomincia il Questionario
+            </button>
+        </div>
+
+        <div class="result" id="result-portiere">
+            <div class="social-proof">
+                <span class="social-proof-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </span>
+                <span class="social-proof-text">Migliaia di Atleti sono migliorati con i miei programmi di allenamento professionali</span>
+            </div>
+            <div class="result-card">
+                <span class="result-badge">La Tua Scheda Ideale</span>
+                <h3 class="result-title">Il Portiere Esplosivo</h3>
+                <p class="result-desc">Preparazione atletica specifica per portieri. Sviluppa esplosività, reattività e potenza per dominare tra i pali.</p>
+                <div class="result-features">
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Sviluppo potenza esplosiva</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Reattività e agilità</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Prevenzione infortuni</span>
+                    </div>
+                </div>
+                <a href="https://www.nicholasrubini.it/prodotto/il-portiere-esplosivo/" class="result-cta">Scopri la Scheda</a>
+            </div>
+            <button class="restart-btn" onclick="restart()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                Ricomincia il Questionario
+            </button>
+        </div>
+
+        <div class="result" id="result-performance-calcio">
+            <div class="social-proof">
+                <span class="social-proof-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </span>
+                <span class="social-proof-text">Migliaia di Atleti sono migliorati con i miei programmi di allenamento professionali</span>
+            </div>
+            <div class="result-card">
+                <span class="result-badge">La Tua Scheda Ideale</span>
+                <h3 class="result-title">Performance A.I. - Calcio</h3>
+                <p class="result-desc">Scheda personalizzata con intelligenza artificiale per calciatori. Preparazione atletica su misura per le tue esigenze.</p>
+                <div class="result-features">
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Scheda generata su misura</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Adattata al tuo ruolo e livello</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Integrata con i tuoi allenamenti</span>
+                    </div>
+                </div>
+                <a href="https://www.preparazioneatletica.com/calcio/" class="result-cta">Scopri Performance A.I.</a>
+            </div>
+            <div class="alternatives">
+                <div class="alternatives-title">Potrebbe interessarti anche</div>
+                <a href="https://nicholasrubini.it/prodotto/il-calciatore-esplosivo/" class="alt-product">
+                    <span class="alt-product-name">Il Calciatore Esplosivo</span>
+                    <span class="alt-product-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <button class="restart-btn" onclick="restart()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                Ricomincia il Questionario
+            </button>
+        </div>
+
+        <div class="result" id="result-performance-basket">
+            <div class="social-proof">
+                <span class="social-proof-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </span>
+                <span class="social-proof-text">Migliaia di Atleti sono migliorati con i miei programmi di allenamento professionali</span>
+            </div>
+            <div class="result-card">
+                <span class="result-badge">La Tua Scheda Ideale</span>
+                <h3 class="result-title">Performance A.I. - Basket</h3>
+                <p class="result-desc">Scheda personalizzata con intelligenza artificiale per cestisti. Preparazione atletica su misura per dominare sul parquet.</p>
+                <div class="result-features">
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Scheda generata su misura</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Focus su salto e agilità</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Integrata con i tuoi allenamenti</span>
+                    </div>
+                </div>
+                <a href="https://www.preparazioneatletica.com/basket/" class="result-cta">Scopri Performance A.I.</a>
+            </div>
+            <div class="alternatives">
+                <div class="alternatives-title">Potrebbe interessarti anche</div>
+                <a href="https://nicholasrubini.it/prodotto/defy-gravity/" class="alt-product">
+                    <span class="alt-product-name">Defy Gravity - Aumenta il Salto</span>
+                    <span class="alt-product-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <button class="restart-btn" onclick="restart()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                Ricomincia il Questionario
+            </button>
+        </div>
+
+        <div class="result" id="result-performance-volley">
+            <div class="social-proof">
+                <span class="social-proof-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </span>
+                <span class="social-proof-text">Migliaia di Atleti sono migliorati con i miei programmi di allenamento professionali</span>
+            </div>
+            <div class="result-card">
+                <span class="result-badge">La Tua Scheda Ideale</span>
+                <h3 class="result-title">Performance A.I. - Pallavolo</h3>
+                <p class="result-desc">Scheda personalizzata con intelligenza artificiale per pallavolisti. Preparazione atletica su misura per saltare più in alto.</p>
+                <div class="result-features">
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Scheda generata su misura</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Focus su salto e potenza</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Integrata con i tuoi allenamenti</span>
+                    </div>
+                </div>
+                <a href="https://www.preparazioneatletica.com/pallavolo/" class="result-cta">Scopri Performance A.I.</a>
+            </div>
+            <div class="alternatives">
+                <div class="alternatives-title">Potrebbe interessarti anche</div>
+                <a href="https://nicholasrubini.it/prodotto/defy-gravity/" class="alt-product">
+                    <span class="alt-product-name">Defy Gravity - Aumenta il Salto</span>
+                    <span class="alt-product-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <button class="restart-btn" onclick="restart()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                Ricomincia il Questionario
+            </button>
+        </div>
+
+        <div class="result" id="result-salto">
+            <div class="social-proof">
+                <span class="social-proof-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </span>
+                <span class="social-proof-text">Migliaia di Atleti sono migliorati con i miei programmi di allenamento professionali</span>
+            </div>
+            <div class="result-card">
+                <span class="result-badge">La Tua Scheda Ideale</span>
+                <h3 class="result-title">Defy Gravity</h3>
+                <p class="result-desc">Il programma definitivo per aumentare il tuo salto verticale. Salta più in alto che mai.</p>
+                <div class="result-features">
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Sviluppo forza esplosiva gambe</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Pliometria avanzata</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Tecnica di salto ottimizzata</span>
+                    </div>
+                </div>
+                <a href="https://nicholasrubini.it/prodotto/defy-gravity/" class="result-cta">Scopri la Scheda</a>
+            </div>
+            <div class="alternatives">
+                <div class="alternatives-title">Potrebbe interessarti anche</div>
+                <a href="https://nicholasrubini.it/prodotto/sprints-jumps/" class="alt-product">
+                    <span class="alt-product-name">Sprints & Jumps for Sports</span>
+                    <span class="alt-product-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <button class="restart-btn" onclick="restart()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                Ricomincia il Questionario
+            </button>
+        </div>
+
+        <div class="result" id="result-strength-sports">
+            <div class="social-proof">
+                <span class="social-proof-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </span>
+                <span class="social-proof-text">Migliaia di Atleti sono migliorati con i miei programmi di allenamento professionali</span>
+            </div>
+            <div class="result-card">
+                <span class="result-badge">La Tua Scheda Ideale</span>
+                <h3 class="result-title">Strength for Sports</h3>
+                <p class="result-desc">12 settimane di preparazione atletica per incrementare la tua performance fisica in qualsiasi sport.</p>
+                <div class="result-features">
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Sviluppo forza funzionale</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Potenza e velocità</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Adattabile a qualsiasi sport</span>
+                    </div>
+                </div>
+                <a href="https://www.nicholasrubini.it/prodotto/scheda-strength-for-sports/" class="result-cta">Scopri la Scheda</a>
+            </div>
+            <div class="alternatives">
+                <div class="alternatives-title">Potrebbe interessarti anche</div>
+                <a href="https://nicholasrubini.it/prodotto/sprints-jumps/" class="alt-product">
+                    <span class="alt-product-name">Sprints & Jumps for Sports</span>
+                    <span class="alt-product-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <button class="restart-btn" onclick="restart()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                Ricomincia il Questionario
+            </button>
+        </div>
+
+        <div class="result" id="result-fighter">
+            <div class="social-proof">
+                <span class="social-proof-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </span>
+                <span class="social-proof-text">Migliaia di Atleti sono migliorati con i miei programmi di allenamento professionali</span>
+            </div>
+            <div class="result-card">
+                <span class="result-badge">La Tua Scheda Ideale</span>
+                <h3 class="result-title">Strength for Combat Sports</h3>
+                <p class="result-desc">Preparazione atletica per fighter. Sviluppa la forza e la potenza che ti servono sul ring o sul tatami.</p>
+                <div class="result-features">
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Forza funzionale per combattimento</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Potenza esplosiva</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Resistenza muscolare</span>
+                    </div>
+                </div>
+                <a href="https://www.nicholasrubini.it/prodotto/scheda-strength-for-combat-sports/" class="result-cta">Scopri la Scheda</a>
+            </div>
+            <div class="alternatives">
+                <div class="alternatives-title">Potrebbe interessarti anche</div>
+                <a href="https://nicholasrubini.it/prodotto/kettlebells-for-performance/" class="alt-product">
+                    <span class="alt-product-name">Kettlebells for Performance</span>
+                    <span class="alt-product-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <button class="restart-btn" onclick="restart()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                Ricomincia il Questionario
+            </button>
+        </div>
+
+        <div class="result" id="result-kettlebell">
+            <div class="social-proof">
+                <span class="social-proof-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </span>
+                <span class="social-proof-text">Migliaia di Atleti sono migliorati con i miei programmi di allenamento professionali</span>
+            </div>
+            <div class="result-card">
+                <span class="result-badge">La Tua Scheda Ideale</span>
+                <h3 class="result-title">Kettlebells for Performance</h3>
+                <p class="result-desc">7 protocolli completi per diventare forte, esplosivo, veloce e resistente usando solo kettlebell.</p>
+                <div class="result-features">
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">7 protocolli progressivi</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Forza, potenza e resistenza</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Allenamento funzionale completo</span>
+                    </div>
+                </div>
+                <a href="https://nicholasrubini.it/prodotto/kettlebells-for-performance/" class="result-cta">Scopri la Scheda</a>
+            </div>
+            <button class="restart-btn" onclick="restart()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                Ricomincia il Questionario
+            </button>
+        </div>
+
+        <div class="result" id="result-esplosivita">
+            <div class="social-proof">
+                <span class="social-proof-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </span>
+                <span class="social-proof-text">Migliaia di Atleti sono migliorati con i miei programmi di allenamento professionali</span>
+            </div>
+            <div class="result-card">
+                <span class="result-badge">La Tua Scheda Ideale</span>
+                <h3 class="result-title">Sprints & Jumps for Sports</h3>
+                <p class="result-desc">12 settimane di scatti e salti per sviluppare potenza, velocità, accelerazione e capacità di salto.</p>
+                <div class="result-features">
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Sviluppo velocità massima</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Pliometria e salti</span>
+                    </div>
+                    <div class="result-feature">
+                        <span class="result-feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="result-feature-text">Accelerazione esplosiva</span>
+                    </div>
+                </div>
+                <a href="https://nicholasrubini.it/prodotto/sprints-jumps/" class="result-cta">Scopri la Scheda</a>
+            </div>
+            <div class="alternatives">
+                <div class="alternatives-title">Potrebbe interessarti anche</div>
+                <a href="https://nicholasrubini.it/prodotto/defy-gravity/" class="alt-product">
+                    <span class="alt-product-name">Defy Gravity - Aumenta il Salto</span>
+                    <span class="alt-product-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <button class="restart-btn" onclick="restart()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                Ricomincia il Questionario
+            </button>
+        </div>
+
+        <!-- Author Box -->
+        <div class="author-box">
+            <h4 class="author-box-title">Nicholas Rubini</h4>
+            <p class="author-box-text">Strength & Conditioning Coach e docente universitario. Da anni aiuto atleti e lifter a migliorare forza, massa e performance con programmazione strutturata e sostenibile.</p>
+        </div>
+
+        <footer>
+            <p>© 2026 <a href="https://nicholasrubini.it">Nicholas Rubini</a></p>
+        </footer>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let answers = {};
+        let stepHistory = ['step1'];
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const percentage = Math.min((stepHistory.length / 4) * 100, 100);
+            progressFill.style.width = percentage + '%';
+        }
+
+        function hideAllSteps() {
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+        }
+
+        function showStep(stepId) {
+            hideAllSteps();
+            const step = document.getElementById(stepId);
+            if (step) {
+                step.classList.add('active');
+            }
+        }
+
+        function goBack(targetStepId) {
+            const targetIndex = stepHistory.indexOf(targetStepId);
+            if (targetIndex !== -1) {
+                stepHistory = stepHistory.slice(0, targetIndex + 1);
+                currentStep = stepHistory.length;
+                updateProgress();
+                showStep(targetStepId);
+                
+                const targetStep = document.getElementById(targetStepId);
+                if (targetStep) {
+                    targetStep.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                }
+            }
+        }
+
+        function selectOption(element, step) {
+            element.parentElement.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+
+            const value = element.dataset.value;
+            answers[`step${step}`] = value;
+
+            setTimeout(() => {
+                processStep(step, value);
+            }, 200);
+        }
+
+        function processStep(step, value) {
+            if (step === 1) {
+                currentStep = 2;
+                updateProgress();
+
+                if (value === 'sala-pesi') {
+                    stepHistory.push('step2-sala-pesi');
+                    showStep('step2-sala-pesi');
+                } else if (value === 'sportivo') {
+                    stepHistory.push('step2-sportivo');
+                    showStep('step2-sportivo');
+                } else if (value === 'fighter') {
+                    showResult('fighter');
+                } else if (value === 'kettlebell') {
+                    showResult('kettlebell');
+                } else if (value === 'esplosivita') {
+                    showResult('esplosivita');
+                } else if (value === 'hybrid') {
+                    showResult('hybrid');
+                }
+            } else if (step === 2) {
+                currentStep = 3;
+                updateProgress();
+
+                if (value === 'forza') {
+                    stepHistory.push('step3-forza');
+                    showStep('step3-forza');
+                }
+                else if (value === 'calcio') {
+                    stepHistory.push('step3-calcio');
+                    showStep('step3-calcio');
+                } else if (value === 'salto') {
+                    stepHistory.push('step3-salto');
+                    showStep('step3-salto');
+                }
+            } else if (step === 3) {
+                currentStep = 4;
+                updateProgress();
+
+                if (value === 'basket') {
+                    stepHistory.push('step4-basket');
+                    showStep('step4-basket');
+                } else if (value === 'volley') {
+                    stepHistory.push('step4-volley');
+                    showStep('step4-volley');
+                }
+            }
+        }
+
+        function showResult(resultType) {
+            document.getElementById('questionSection').style.display = 'none';
+            document.querySelector('.progress-container').style.display = 'none';
+            
+            const resultId = `result-${resultType}`;
+            const resultElement = document.getElementById(resultId);
+            if (resultElement) {
+                resultElement.classList.add('active');
+            }
+        }
+
+        function restart() {
+            document.querySelectorAll('.result').forEach(result => {
+                result.classList.remove('active');
+            });
+
+            currentStep = 1;
+            answers = {};
+            stepHistory = ['step1'];
+            
+            document.getElementById('questionSection').style.display = 'flex';
+            document.querySelector('.progress-container').style.display = 'block';
+            
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+
+            showStep('step1');
+            updateProgress();
+        }
+
+        updateProgress();
+    </script>
+</body>
+</html>
